@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import axios from "axios";
+import Link from "next/link";
 
-
-export default function Main() {
-  const [form, setForm] = useState({ email: "", password: ""});
+export default function FormRegister() {
+  const [form, setForm] = useState({ name:"", email: "", password: ""});
   const router = useRouter();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -16,26 +15,31 @@ export default function Main() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log(form);
-    try{
-    const res = await axios.post("http://localhost:4000/api/auth/login", form);
+
+    const res = await axios.post("http://localhost:4000/api/auth/register", form);
     const data = await res.data;
-    console.log(data);
-    const token= data.token;
-    localStorage.setItem("token", token);
-    router.push("/dashboard");
-    }
-    catch(err){
-      console.error("Login failed:", err);
-      alert("Invalid email or password");
+
+    if (res.status !== 201) {
+      alert(data.message || "Something went wrong");
       return;
     }
+
+    alert("Registration successful! Please log in.");
+    router.push("/");
 
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-    <form onSubmit={handleSubmit} className=" space-y-6 max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto">
+        <input
+        type="text"
+        name="name"
+        placeholder="Your name"
+        value={form.name}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+        />
       <input
         type="email"
         name="email"
@@ -52,24 +56,22 @@ export default function Main() {
         onChange={handleChange}
         className="w-full p-2 border rounded"
       />
-      <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center">
         <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded "
-          >
-          Log In
+        type="submit"
+        className="bg-blue-600 text-white px-4 py-2 rounded "
+        >
+        Register
         </button>
-        <Link 
-          href="/register" 
+
+              <Link 
+          href="/" 
           className="text-blue-600 hover:underline"
         >
-          Don't have an account yet?
+        Already have an account?
         </Link>
-
       </div>
     </form>
     </div>
-    
   );
 }
-

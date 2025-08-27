@@ -6,7 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 
 
-export default function Main() {
+export default function FormLogin() {
   const [form, setForm] = useState({ email: "", password: ""});
   const router = useRouter();
 
@@ -72,4 +72,3 @@ export default function Main() {
     
   );
 }
-
