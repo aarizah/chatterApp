@@ -25,6 +25,7 @@ export async function connectDB(): Promise<Db> {
     console.log("✅ Connected to MongoDB:", db.databaseName);
 
     await db.collection("users").createIndex({ email: 1 }, { unique: true });
+    await db.collection("messages").createIndex({ channelId: 1, timestamp: 1 });
   }
   return db;
 }

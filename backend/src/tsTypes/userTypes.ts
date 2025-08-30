@@ -16,8 +16,6 @@ export interface User {
   passwordHash: string; // stored only in “DB”
 }
 
-export type PublicUser = Omit<User, 'passwordHash'>;
-
 export interface AuthPayload {
   user_id: string;        // user id
   email?: string;
